@@ -3,10 +3,11 @@ import { User } from "./user.types"
 import bcrypt from "bcryptjs"
 import { generateToken } from "../../utils/jwt"
 import { v4 as uuidv4 } from "uuid"
+import { AppError } from "../../middleware/error.middleware"
 
 export const signup = async (email: string, password: string) => {
     const existingUser = users.find(user => user.email === email);
-    if (existingUser) throw new Error("User already exists");
+    if (existingUser) throw new AppError("Email already in use");
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -23,10 +24,10 @@ export const signup = async (email: string, password: string) => {
 
 export const signin = async (email: string, password: string) => {
     const user = users.find(user => user.email === email);
-    if (!user) throw new Error("Invalid credentials");
+    if (!user) throw new AppError("Invalid credentials", 401);
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) throw new Error("Invalid credentials");
+    if (!isPasswordValid) throw new AppError("Invalid credentials", 401);
 
     return generateToken({ id: user.id, email: user.email });
 }
