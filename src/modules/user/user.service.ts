@@ -30,3 +30,11 @@ export const signin = async (email: string, password: string) => {
 
     return generateToken({ id: user.id, email: user.email });
 }
+
+export const getUserById = async (id: string): Promise<User | undefined> => {
+    return users.find(user => user.id === id);
+}
+
+export const getAllUsers = async (): Promise<User[]> => {
+    return users;
+}

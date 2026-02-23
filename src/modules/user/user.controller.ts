@@ -5,7 +5,7 @@ export const signup = async (req: Request, res: Response) => {
     try {
         const { email, password } = req.body;
         const token = await userServices.signup(email, password);
-        res.json({ token });
+        res.status(201).json({ token });
     } catch (error: any) {
         res.status(400).json({ message: error.message });
     };
@@ -20,3 +20,12 @@ export const signin = async (req: Request, res: Response) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+export const getAllUsers = async (req: Request, res: Response) => {
+    try {
+        const users = await userServices.getAllUsers();
+        res.json(users);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+}
